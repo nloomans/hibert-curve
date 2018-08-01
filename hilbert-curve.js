@@ -64,25 +64,24 @@ function hilbertCurve(order, point1d) {
             throw new Error(`Point ${point1d} is not smaller than size ${size}`);
         }
     } else {
-        if (point1d < quadrantSize) {
-            // Bottom left
-            const point = hilbertCurve(order - 1,  point1d);
-            return mapPoint(flipLeft(point), [1, 0], lineSize);
-        } else if (point1d < quadrantSize * 2) {
-            // Top left
-            const point = hilbertCurve(order - 1, point1d - (quadrantSize * 1));
-            return mapPoint(point, [0, 0], lineSize);
-        } else if (point1d < quadrantSize * 3) {
-            // Top Right
-            const point = hilbertCurve(order - 1, point1d - (quadrantSize * 2));
-            return mapPoint(point, [0, 1], lineSize);
-        } else if (point1d < quadrantSize * 4) {
-            // Bottom right
-            const point = hilbertCurve(order - 1, point1d - (quadrantSize * 3));
-            return mapPoint(flipRight(point), [1, 1], lineSize);
-        } else {
-            throw new Error(`Point ${point1d} is not smaller than size ${size}`);
+        for (let i = 0; i < 4; i++) {
+            if (point1d >= quadrantSize * (i + 1)) continue;
+
+            const point = hilbertCurve(order - 1,  point1d - (quadrantSize * i));
+            const mappingPoint = hilbertCurve(1, i);
+
+            let flippedPoint;
+            if (point1d < quadrantSize)
+                flippedPoint = flipLeft(point);
+            else if (point1d >= quadrantSize * 3)
+                flippedPoint = flipRight(point);
+            else
+                flippedPoint = point;
+
+            const mappedPoint = mapPoint(flippedPoint, mappingPoint, lineSize);
+            return mappedPoint;
         }
+        throw new Error(`Point ${point1d} is not smaller than size ${size}`);
     }
 }
 
