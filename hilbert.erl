@@ -5,6 +5,8 @@
 -define(TOP_RIGHT, 2).
 -define(BOTTOM_RIGHT, 3).
 
+% TODO: Swap X and Y, they got mixed up...
+
 getQuadrant1d(Point1d, QuadrantSize) ->
     getQuadrant1d(Point1d, QuadrantSize, 0).
 
