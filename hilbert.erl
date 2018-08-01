@@ -16,16 +16,13 @@ getQuadrant1d(Point1d, QuadrantSize, QuadrantToCheck)
         getQuadrant1d(Point1d, QuadrantSize, QuadrantToCheck + 1)
     end.
 
-flipLeft({1, 0} = Point) -> Point;
-flipLeft({0, 0}) -> {1, 1};
-flipLeft({0, 1} = Point) -> Point;
-flipLeft({1, 1}) -> {0, 0}.
+flipLeft({PointX, PointY}, Width) ->
+    HorizontalFlippedPoint = {PointX, (-PointY) + (Width - 1)},
+    {RightFlippedPointX, RightFlippedPointY} = flipRight(HorizontalFlippedPoint),
+    FlippedPoint = {RightFlippedPointX, (-RightFlippedPointY) + (Width - 1)},
+    FlippedPoint.
 
-flipRight({1, 0}) -> {0, 1};
-flipRight({0, 0} = Point) -> Point;
-flipRight({0, 1}) -> {1, 0};
-flipRight({1, 1} = Point) -> Point.
-
+flipRight({PointX, PointY}) -> {PointY, PointX}.
 
 mapPoint(?BOTTOM_LEFT, {PointX, PointY}, LineSize) ->
     {PointX + LineSize, PointY};
@@ -50,17 +47,16 @@ get(Point1d, Order) when Order > 1 ->
     Quadrant = getQuadrant1d(Point1d, QuadrantSize),
 
     RawPoint = get(Point1d - (Quadrant * QuadrantSize), Order - 1),
-    
+
     FlippedPoint =
-        if Point1d < QuadrantSize * 1 -> flipLeft(RawPoint)
+        if Point1d < QuadrantSize * 1 -> flipLeft(RawPoint, LineSize)
          ; Point1d < QuadrantSize * 2 -> RawPoint
          ; Point1d < QuadrantSize * 3 -> RawPoint
          ; Point1d < QuadrantSize * 4 -> flipRight(RawPoint)
         end,
 
-    MappedPoint = mapPoint(Quadrant, FlippedPoint, LineSize),
-    io:format("~p~n", [MappedPoint]).
+    mapPoint(Quadrant, FlippedPoint, LineSize).
 
 test() ->
-    GetOrder2 = fun (Point1d) -> get(Point1d, 2) end,
+    GetOrder2 = fun (Point1d) -> io:format("~p~n", [get(Point1d, 2)]) end,
     lists:foreach(GetOrder2, lists:seq(0, 15)).
