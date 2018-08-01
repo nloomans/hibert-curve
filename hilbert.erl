@@ -24,14 +24,13 @@ flipLeft({PointX, PointY}, Width) ->
 
 flipRight({PointX, PointY}) -> {PointY, PointX}.
 
-mapPoint(?BOTTOM_LEFT, {PointX, PointY}, LineSize) ->
-    {PointX + LineSize, PointY};
-mapPoint(?TOP_LEFT, Point, _) ->
-    Point;
-mapPoint(?TOP_RIGHT, {PointX, PointY}, LineSize) ->
-    {PointX, PointY + LineSize};
-mapPoint(?BOTTOM_RIGHT, {PointX, PointY}, LineSize) ->
-    {PointX + LineSize, PointY + LineSize}.
+mapPoint(Quadrant, {PointX, PointY}, LineSize) ->
+    case Quadrant of
+        ?BOTTOM_LEFT -> {PointX + LineSize, PointY};
+        ?TOP_LEFT -> {PointX, PointY};
+        ?TOP_RIGHT -> {PointX, PointY + LineSize};
+        ?BOTTOM_RIGHT -> {PointX + LineSize, PointY + LineSize}
+    end.
 
 get(Point1d, 1) when Point1d < 4 ->
     if Point1d == ?BOTTOM_LEFT -> {1, 0};
