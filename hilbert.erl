@@ -42,7 +42,7 @@ get(Point1d, 1) when Point1d < 4 ->
 get(Point1d, Order) when Order > 1 ->
     Size = trunc(math:pow(4, Order)),
     LineSize = trunc(math:pow(2, Order - 1)),
-    QuadrantSize = Size div 4,
+    QuadrantSize = trunc(Size / 4),
     Quadrant = getQuadrant1d(Point1d, QuadrantSize),
 
     RawPoint = get(Point1d - (Quadrant * QuadrantSize), Order - 1),
