@@ -5,16 +5,8 @@
 -define(TOP_RIGHT, 2).
 -define(BOTTOM_RIGHT, 3).
 
-getQuadrant1d(Point1d, QuadrantSize) ->
-    getQuadrant1d(Point1d, QuadrantSize, 0).
-
-getQuadrant1d(Point1d, QuadrantSize, QuadrantToCheck)
-        when Point1d < QuadrantSize * 4 ->
-    if Point1d < QuadrantSize * (QuadrantToCheck + 1) ->
-        QuadrantToCheck
-     ; Point1d >= QuadrantSize * (QuadrantToCheck + 1) ->
-        getQuadrant1d(Point1d, QuadrantSize, QuadrantToCheck + 1)
-    end.
+getQuadrant1d(Point1d, QuadrantSize) when Point1d < QuadrantSize * 4 ->
+    trunc(Point1d / QuadrantSize).
 
 flipLeft({PointX, PointY}, Width) ->
     HorizontalFlippedPoint = {(-PointX) + (Width - 1), PointY},
