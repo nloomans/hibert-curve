@@ -5,8 +5,6 @@
 -define(TOP_RIGHT, 2).
 -define(BOTTOM_RIGHT, 3).
 
-% TODO: Swap X and Y, they got mixed up...
-
 getQuadrant1d(Point1d, QuadrantSize) ->
     getQuadrant1d(Point1d, QuadrantSize, 0).
 
@@ -19,25 +17,25 @@ getQuadrant1d(Point1d, QuadrantSize, QuadrantToCheck)
     end.
 
 flipLeft({PointX, PointY}, Width) ->
-    HorizontalFlippedPoint = {PointX, (-PointY) + (Width - 1)},
+    HorizontalFlippedPoint = {(-PointX) + (Width - 1), PointY},
     {RightFlippedPointX, RightFlippedPointY} = flipRight(HorizontalFlippedPoint),
-    FlippedPoint = {RightFlippedPointX, (-RightFlippedPointY) + (Width - 1)},
+    FlippedPoint = {(-RightFlippedPointX) + (Width - 1), RightFlippedPointY},
     FlippedPoint.
 
 flipRight({PointX, PointY}) -> {PointY, PointX}.
 
 mapPoint(Quadrant, {PointX, PointY}, LineSize) ->
     case Quadrant of
-        ?BOTTOM_LEFT -> {PointX + LineSize, PointY};
+        ?BOTTOM_LEFT -> {PointX, PointY + LineSize};
         ?TOP_LEFT -> {PointX, PointY};
-        ?TOP_RIGHT -> {PointX, PointY + LineSize};
+        ?TOP_RIGHT -> {PointX + LineSize, PointY};
         ?BOTTOM_RIGHT -> {PointX + LineSize, PointY + LineSize}
     end.
 
 get(Point1d, 1) when Point1d < 4 ->
-    if Point1d == ?BOTTOM_LEFT -> {1, 0};
+    if Point1d == ?BOTTOM_LEFT -> {0, 1};
        Point1d == ?TOP_LEFT -> {0, 0};
-       Point1d == ?TOP_RIGHT -> {0, 1};
+       Point1d == ?TOP_RIGHT -> {1, 0};
        Point1d == ?BOTTOM_RIGHT -> {1, 1}
     end;
 
