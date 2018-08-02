@@ -29,12 +29,10 @@ mapPoint(?TOP_LEFT, {X, Y}, _LineSize) -> {X, Y};
 mapPoint(?TOP_RIGHT, {X, Y}, LineSize) -> {X + LineSize, Y};
 mapPoint(?BOTTOM_RIGHT, {X, Y}, LineSize) -> {X + LineSize, Y + LineSize}.
 
-get(Point1d, 1) when Point1d < 4 ->
-    if Point1d == ?BOTTOM_LEFT -> {0, 1};
-       Point1d == ?TOP_LEFT -> {0, 0};
-       Point1d == ?TOP_RIGHT -> {1, 0};
-       Point1d == ?BOTTOM_RIGHT -> {1, 1}
-    end;
+get(?BOTTOM_LEFT, 1) -> {0, 1};
+get(?TOP_LEFT, 1) -> {0, 0};
+get(?TOP_RIGHT, 1) -> {1, 0};
+get(?BOTTOM_RIGHT, 1) -> {1, 1};
 
 get(Point1d, Order) when Order > 1 ->
     Size = trunc(math:pow(4, Order)),
