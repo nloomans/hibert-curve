@@ -45,10 +45,11 @@ get(Point1d, Order) when Order > 1 ->
     RawPoint = get(Point1d - (Quadrant * QuadrantSize), Order - 1),
 
     FlippedPoint =
-        if Point1d < QuadrantSize * 1 -> flipLeft(RawPoint, LineSize)
-         ; Point1d < QuadrantSize * 2 -> RawPoint
-         ; Point1d < QuadrantSize * 3 -> RawPoint
-         ; Point1d < QuadrantSize * 4 -> flipRight(RawPoint)
+        case Quadrant of
+            ?BOTTOM_LEFT -> flipLeft(RawPoint, LineSize);
+            ?TOP_LEFT -> RawPoint;
+            ?TOP_RIGHT -> RawPoint;
+            ?BOTTOM_RIGHT -> flipRight(RawPoint)
         end,
 
     mapPoint(Quadrant, FlippedPoint, LineSize).
