@@ -5,7 +5,7 @@
 -define(TOP_RIGHT, 2).
 -define(BOTTOM_RIGHT, 3).
 
-getQuadrant1d(Point1d, QuadrantSize) when Point1d < QuadrantSize * 4 ->
+getQuadrant(Point1d, QuadrantSize) when Point1d < QuadrantSize * 4 ->
     trunc(Point1d / QuadrantSize).
 
 flipLeft({PointX, PointY}, Width) ->
@@ -35,7 +35,7 @@ get(Point1d, Order) when Order > 1 ->
     Size = trunc(math:pow(4, Order)),
     LineSize = trunc(math:pow(2, Order - 1)),
     QuadrantSize = trunc(Size / 4),
-    Quadrant = getQuadrant1d(Point1d, QuadrantSize),
+    Quadrant = getQuadrant(Point1d, QuadrantSize),
 
     RawPoint = get(Point1d - (Quadrant * QuadrantSize), Order - 1),
     FlippedPoint = flipQuadrant(Quadrant, RawPoint, LineSize),
