@@ -24,6 +24,11 @@ flipLeft({PointX, PointY}, Width) ->
 
 flipRight({PointX, PointY}) -> {PointY, PointX}.
 
+flipQuadrant(?BOTTOM_LEFT, Point, LineSize) -> flipLeft(Point, LineSize);
+flipQuadrant(?TOP_LEFT, Point, _LineSize) -> Point;
+flipQuadrant(?TOP_RIGHT, Point, _LineSize) -> Point;
+flipQuadrant(?BOTTOM_RIGHT, Point, _LineSize) -> flipRight(Point).
+
 mapPoint(?BOTTOM_LEFT, {X, Y}, LineSize) -> {X, Y + LineSize};
 mapPoint(?TOP_LEFT, {X, Y}, _LineSize) -> {X, Y};
 mapPoint(?TOP_RIGHT, {X, Y}, LineSize) -> {X + LineSize, Y};
@@ -41,14 +46,7 @@ get(Point1d, Order) when Order > 1 ->
     Quadrant = getQuadrant1d(Point1d, QuadrantSize),
 
     RawPoint = get(Point1d - (Quadrant * QuadrantSize), Order - 1),
-
-    FlippedPoint =
-        case Quadrant of
-            ?BOTTOM_LEFT -> flipLeft(RawPoint, LineSize);
-            ?TOP_LEFT -> RawPoint;
-            ?TOP_RIGHT -> RawPoint;
-            ?BOTTOM_RIGHT -> flipRight(RawPoint)
-        end,
+    FlippedPoint = flipQuadrant(Quadrant, RawPoint, LineSize),
 
     mapPoint(Quadrant, FlippedPoint, LineSize).
 
