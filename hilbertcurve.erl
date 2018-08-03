@@ -1,4 +1,4 @@
--module(hilbert).
+-module(hilbertcurve).
 -export([get/2, test/1]).
 
 %%% This module allows you to calculate the position of a 1d point in 2d space
