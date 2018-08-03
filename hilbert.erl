@@ -21,6 +21,12 @@ quadrantContainingPoint(Point1d, QuadrantArea)
     %     in 1d space.
     trunc(Point1d / QuadrantArea).
 
+%% Get the starting point of a quadrant in 1d space.
+quadrant1dOffset(QuadrantPosition, QuadrantArea) ->
+    % This calculation takes advantage of the same nice properties as described
+    % in the `quadrantContainingPoint` comment.
+    QuadrantPosition * QuadrantArea.
+
 %% Flip a point horizontal while not moving the field.
 flipHorizontal({X, Y}, Width) ->
     {(-X) + (Width - 1), Y}.
@@ -60,7 +66,10 @@ get(Point1d, Order) when Order > 1 ->
 
     Quadrant = quadrantContainingPoint(Point1d, QuadrantArea),
 
-    RawPoint = get(Point1d - (Quadrant * QuadrantArea), Order - 1),
+    RawPoint = get(
+        Point1d - quadrant1dOffset(Quadrant, QuadrantArea),
+        Order - 1
+    ),
     FlippedPoint = flipQuadrant(Quadrant, RawPoint, QuadrantWidth),
 
     mapPoint(Quadrant, FlippedPoint, QuadrantWidth).
