@@ -5,6 +5,12 @@
 -define(TOP_RIGHT, 2).
 -define(BOTTOM_RIGHT, 3).
 
+getOrderSize(Order) ->
+    trunc(math:pow(4, Order)).
+
+getOrderWidth(Order) ->
+    trunc(math:pow(2, Order)).
+
 getQuadrant(Point1d, QuadrantSize) when Point1d < QuadrantSize * 4 ->
     trunc(Point1d / QuadrantSize).
 
@@ -35,9 +41,9 @@ get(?TOP_RIGHT, 1) -> {1, 0};
 get(?BOTTOM_RIGHT, 1) -> {1, 1};
 
 get(Point1d, Order) when Order > 1 ->
-    Size = trunc(math:pow(4, Order)),
-    QuadrantWidth = trunc(math:pow(2, Order - 1)),
-    QuadrantSize = trunc(Size / 4),
+    QuadrantSize = getOrderSize(Order - 1),
+    QuadrantWidth = getOrderWidth(Order - 1),
+
     Quadrant = getQuadrant(Point1d, QuadrantSize),
 
     RawPoint = get(Point1d - (Quadrant * QuadrantSize), Order - 1),
