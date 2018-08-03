@@ -8,23 +8,23 @@
 getQuadrant(Point1d, QuadrantSize) when Point1d < QuadrantSize * 4 ->
     trunc(Point1d / QuadrantSize).
 
-flipLeft({PointX, PointY}, Width) ->
-    HorizontalFlippedPoint = {(-PointX) + (Width - 1), PointY},
-    {RightFlippedPointX, RightFlippedPointY} = flipRight(HorizontalFlippedPoint),
-    FlippedPoint = {(-RightFlippedPointX) + (Width - 1), RightFlippedPointY},
-    FlippedPoint.
+flipQuadrant(?BOTTOM_LEFT, {X,Y}, QuadrantWidth) ->
+    HorizontalFlippedPoint = {(-X) + (QuadrantWidth - 1), Y},
+    {RightFlippedPointX, RightFlippedPointY} = flipQuadrant(?BOTTOM_RIGHT, HorizontalFlippedPoint, QuadrantWidth),
+    FlippedPoint = {(-RightFlippedPointX) + (QuadrantWidth - 1), RightFlippedPointY},
+    FlippedPoint;
+flipQuadrant(?TOP_LEFT, Point, _QuadrantWidth) -> Point;
+flipQuadrant(?TOP_RIGHT, Point, _QuadrantWidth) -> Point;
+flipQuadrant(?BOTTOM_RIGHT, {X, Y}, _QuadrantWidth) -> {Y, X}.
 
-flipRight({PointX, PointY}) -> {PointY, PointX}.
-
-flipQuadrant(?BOTTOM_LEFT, Point, LineSize) -> flipLeft(Point, LineSize);
-flipQuadrant(?TOP_LEFT, Point, _LineSize) -> Point;
-flipQuadrant(?TOP_RIGHT, Point, _LineSize) -> Point;
-flipQuadrant(?BOTTOM_RIGHT, Point, _LineSize) -> flipRight(Point).
-
-mapPoint(?BOTTOM_LEFT, {X, Y}, LineSize) -> {X, Y + LineSize};
-mapPoint(?TOP_LEFT, {X, Y}, _LineSize) -> {X, Y};
-mapPoint(?TOP_RIGHT, {X, Y}, LineSize) -> {X + LineSize, Y};
-mapPoint(?BOTTOM_RIGHT, {X, Y}, LineSize) -> {X + LineSize, Y + LineSize}.
+mapPoint(?BOTTOM_LEFT, {X, Y}, QuadrantWidth) ->
+    {X, Y + QuadrantWidth};
+mapPoint(?TOP_LEFT, {X, Y}, _QuadrantWidth) ->
+    {X, Y};
+mapPoint(?TOP_RIGHT, {X, Y}, QuadrantWidth) ->
+    {X + QuadrantWidth, Y};
+mapPoint(?BOTTOM_RIGHT, {X, Y}, QuadrantWidth) ->
+    {X + QuadrantWidth, Y + QuadrantWidth}.
 
 get(?BOTTOM_LEFT, 1) -> {0, 1};
 get(?TOP_LEFT, 1) -> {0, 0};
@@ -33,14 +33,14 @@ get(?BOTTOM_RIGHT, 1) -> {1, 1};
 
 get(Point1d, Order) when Order > 1 ->
     Size = trunc(math:pow(4, Order)),
-    LineSize = trunc(math:pow(2, Order - 1)),
+    QuadrantWidth = trunc(math:pow(2, Order - 1)),
     QuadrantSize = trunc(Size / 4),
     Quadrant = getQuadrant(Point1d, QuadrantSize),
 
     RawPoint = get(Point1d - (Quadrant * QuadrantSize), Order - 1),
-    FlippedPoint = flipQuadrant(Quadrant, RawPoint, LineSize),
+    FlippedPoint = flipQuadrant(Quadrant, RawPoint, QuadrantWidth),
 
-    mapPoint(Quadrant, FlippedPoint, LineSize).
+    mapPoint(Quadrant, FlippedPoint, QuadrantWidth).
 
 test() ->
     GetOrder2 = fun (Point1d) -> io:format("~p~n", [get(Point1d, 2)]) end,
