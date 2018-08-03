@@ -5,14 +5,14 @@
 -define(TOP_RIGHT, 2).
 -define(BOTTOM_RIGHT, 3).
 
-getOrderSize(Order) ->
+getOrderArea(Order) ->
     trunc(math:pow(4, Order)).
 
 getOrderWidth(Order) ->
     trunc(math:pow(2, Order)).
 
-getQuadrant(Point1d, QuadrantSize) when Point1d < QuadrantSize * 4 ->
-    trunc(Point1d / QuadrantSize).
+getQuadrant(Point1d, QuadrantArea) when Point1d < QuadrantArea * 4 ->
+    trunc(Point1d / QuadrantArea).
 
 flipHorizontal({X, Y}, Width) ->
     {(-X) + (Width -1), Y}.
@@ -41,12 +41,12 @@ get(?TOP_RIGHT, 1) -> {1, 0};
 get(?BOTTOM_RIGHT, 1) -> {1, 1};
 
 get(Point1d, Order) when Order > 1 ->
-    QuadrantSize = getOrderSize(Order - 1),
+    QuadrantArea = getOrderArea(Order - 1),
     QuadrantWidth = getOrderWidth(Order - 1),
 
-    Quadrant = getQuadrant(Point1d, QuadrantSize),
+    Quadrant = getQuadrant(Point1d, QuadrantArea),
 
-    RawPoint = get(Point1d - (Quadrant * QuadrantSize), Order - 1),
+    RawPoint = get(Point1d - (Quadrant * QuadrantArea), Order - 1),
     FlippedPoint = flipQuadrant(Quadrant, RawPoint, QuadrantWidth),
 
     mapPoint(Quadrant, FlippedPoint, QuadrantWidth).
