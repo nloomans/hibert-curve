@@ -1,6 +1,12 @@
 -module(hilbert).
 -export([get/2, test/1]).
 
+%%% This module allows you to calculate the position of a 1d point in 2d space
+%%% using a hilbert curve. 
+%%%
+%%% For more info watch 3blue1brows video on this topic:
+%%% https://www.youtube.com/watch?v=3s7h2MHQtxc
+
 %% The number that these positions have represents the order in which a line
 %% would go though them. This is usefull for some calculations.
 -define(BOTTOM_LEFT, 0).
