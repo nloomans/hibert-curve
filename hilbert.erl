@@ -8,10 +8,13 @@
 getQuadrant(Point1d, QuadrantSize) when Point1d < QuadrantSize * 4 ->
     trunc(Point1d / QuadrantSize).
 
-flipQuadrant(?BOTTOM_LEFT, {X,Y}, QuadrantWidth) ->
-    HorizontalFlippedPoint = {(-X) + (QuadrantWidth - 1), Y},
-    {RightFlippedPointX, RightFlippedPointY} = flipQuadrant(?BOTTOM_RIGHT, HorizontalFlippedPoint, QuadrantWidth),
-    FlippedPoint = {(-RightFlippedPointX) + (QuadrantWidth - 1), RightFlippedPointY},
+flipHorizontal({X, Y}, Width) ->
+    {(-X) + (Width -1), Y}.
+
+flipQuadrant(?BOTTOM_LEFT, Point, QuadrantWidth) ->
+    HFlippedPoint = flipHorizontal(Point, QuadrantWidth),
+    FlippedHFlippedPoint = flipQuadrant(?BOTTOM_RIGHT, HFlippedPoint, QuadrantWidth),
+    FlippedPoint = flipHorizontal(FlippedHFlippedPoint, QuadrantWidth),
     FlippedPoint;
 flipQuadrant(?TOP_LEFT, Point, _QuadrantWidth) -> Point;
 flipQuadrant(?TOP_RIGHT, Point, _QuadrantWidth) -> Point;
