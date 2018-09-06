@@ -28,7 +28,8 @@ quadrantContainingPoint(Point1d, QuadrantArea)
     trunc(Point1d / QuadrantArea).
 
 %% Get the starting point of a quadrant in 1d space.
-quadrant1dOffset(QuadrantPosition, QuadrantArea) ->
+quadrant1dOffset(QuadrantPosition, QuadrantArea)
+        when QuadrantPosition < 4 ->
     % This calculation takes advantage of the same nice properties as described
     % in the `quadrantContainingPoint` comment.
     QuadrantPosition * QuadrantArea.
